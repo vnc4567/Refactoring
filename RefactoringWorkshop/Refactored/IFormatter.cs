@@ -26,5 +26,10 @@
             result += "You earned " + frequentRenterPoints + " frequent renter points";
             return result;
         }
+
+        public string GetHeader(double name)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

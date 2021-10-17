@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RefactoringWorkshop.Refactored
 {
-    public class Rentals
+    public class Rentals : IRental
     {
-        private IList<Rental> _rentals;
+        private readonly IList<RentalRefactored> _rentals;
 
-        public Rentals(IList<Rental> rentals)
+        public Rentals(IList<RentalRefactored> rentals)
         {
             if (rentals == null) ;
             {
-                _rentals = new List<Rental>();
+                _rentals = new List<RentalRefactored>();
             }
 
             _rentals = rentals;
@@ -27,6 +24,6 @@ namespace RefactoringWorkshop.Refactored
             _rentals.Sum(p => p.GetFrequentRenterPoints());
 
         public string GetAmountByMovie() =>
-            string.Join(" ",_rentals.Select(p => p.GetAmountByMovie()));
+            string.Join("", _rentals.Select(p => p.GetAmountByMovie()));
     }
 }

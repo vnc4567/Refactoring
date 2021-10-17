@@ -7,19 +7,17 @@ namespace RefactoringWorkshop
 
     public class CustomerRefactored : DomainObject
     {
-        public IList<Rental> Rentals = new List<Rental>();
+        public IRental Rentals { get; init; }
 
         public string BaseStatement(IFormatter formatter)
         {
-            Rentals rentals = new Rentals(Rentals);
+            double totalAmount = Rentals.CalculAmountOfRental();
 
-            double totalAmount = rentals.CalculAmountOfRental();
-
-            int frequentRenterPoints = rentals.GetFrequentRenterPoints();
+            int frequentRenterPoints = Rentals.GetFrequentRenterPoints();
 
             string result = "Rental Record for " + Name + " ";
 
-            result += rentals.GetAmountByMovie();
+            result += Rentals.GetAmountByMovie();
 
             result = formatter.GetFooter(totalAmount, frequentRenterPoints, result);
 

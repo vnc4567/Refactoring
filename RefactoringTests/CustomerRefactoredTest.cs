@@ -1,25 +1,27 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using RefactoringWorkshop;
+using RefactoringWorkshop.Refactored;
 using System.Collections.Generic;
 using Xunit;
 
 namespace RefactoringTests
 {
-
-    public class CustomerTest
+    public class CustomerRefactoredTest
     {
-        private readonly Customer _sut;
+        private readonly CustomerRefactored _sut;
 
-        public CustomerTest()
+        public CustomerRefactoredTest()
         {
-            _sut = new()
+            IList<RentalRefactored> rentals = new List<RentalRefactored>
             {
-                Rentals = new List<Rental>()
-                {
                      new(){DaysRented = 4,Name="rental1",Tape = new(){Movie = new(){PriceCode = 0,}}},
                     new(){DaysRented = 7,Name="rental2",Tape = new(){Movie = new(){PriceCode = 1,}}},
                     new(){DaysRented = 1,Name="rental3",Tape = new(){Movie = new(){PriceCode = 2,}}}
-                }
+            };
+
+            _sut = new()
+            {
+                Rentals = new Rentals(rentals)
             };
         }
 
