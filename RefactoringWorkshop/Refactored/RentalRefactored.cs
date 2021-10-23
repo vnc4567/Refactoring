@@ -1,33 +1,54 @@
-﻿namespace RefactoringWorkshop.Refactored
+﻿using System;
+using System.Collections.Generic;
+
+namespace RefactoringWorkshop.Refactored
 {
     public class RentalRefactored : DomainObject, IRental
     {
         public int DaysRented { get; set; }
         public Tape Tape { get; set; }
 
-        public double CalculAmountOfRental()
+        private IReadOnlyDictionary<int, Func<double>> RuleCalculAmountByTypeMovie;
+
+        public RentalRefactored()
         {
-            double result = 0;
-
-            switch (Tape.Movie.PriceCode)
+            RuleCalculAmountByTypeMovie = new Dictionary<int, Func<double>>
             {
-                case Movie.Regular:
-                    result += 2;
-                    if (DaysRented > 2)
-                        result += (DaysRented - 2) * 1.5;
-                    break;
-                case Movie.NewRelease:
-                    result += DaysRented * 3;
-                    break;
-                case Movie.Childrens:
-                    result += 1.5;
-                    if (DaysRented > 3)
-                        result += (DaysRented - 3) * 1.5;
-                    break;
+                {Movie.Regular,()=> RegularCalcul() },
+                {Movie.NewRelease,()=> NewReleaseCalcul() },
+                {Movie.Childrens,()=> ChildrenCalcul() },
+            };
+        }
 
-            }
+        public double CalculAmountOfRental() => CalculAmountByTypeMovie(Tape.Movie.PriceCode);
 
+        private double ChildrenCalcul()
+        {
+            double result = 1.5;
+            if (DaysRented > 3)
+                result += (DaysRented - 3) * 1.5;
             return result;
+        }
+
+        private double NewReleaseCalcul()
+        {
+            return DaysRented * 3;
+        }
+
+        private double RegularCalcul()
+        {
+            double result = 2;
+            if (DaysRented > 2)
+                result += (DaysRented - 2) * 1.5;
+            return result;
+        }
+
+        private double CalculAmountByTypeMovie(int typeMovie)
+        {
+            if (!RuleCalculAmountByTypeMovie.ContainsKey(typeMovie))
+                return 0;
+
+            return RuleCalculAmountByTypeMovie[typeMovie].Invoke();
         }
 
         public int GetFrequentRenterPoints()

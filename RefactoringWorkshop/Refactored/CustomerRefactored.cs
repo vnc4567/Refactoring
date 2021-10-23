@@ -4,12 +4,11 @@ using System.Collections.Generic;
 
 namespace RefactoringWorkshop
 {
-
     public class CustomerRefactored : DomainObject
     {
         public IRental Rentals { get; init; }
 
-        public string BaseStatement(IFormatter formatter)
+        private string BaseStatement(IFormatter formatter)
         {
             double totalAmount = Rentals.CalculAmountOfRental();
 
@@ -27,7 +26,5 @@ namespace RefactoringWorkshop
         public string Statement() => BaseStatement(new BaseFormatter());
 
         public string HtmlStatement() => BaseStatement(new HtmlFormatter());
-
-
     }
 }
